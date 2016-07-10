@@ -1,0 +1,148 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+var util = require('util');
+var app = require('../app');
+var colors = require('colors');
+var debug = require('debug')('myapp:server');
+var server = require('http').Server(app);
+var httpProxy = require('../node_modules/http-proxy');
+var Twitter = require('node-tweet-stream');
+var mongoose = require('mongoose');
+var models = require('../models/datamodel.js');
+
+try {
+  var io = require('socket.io')(server),
+      client = require('socket.io-client');
+} catch(ex) {
+  console.error('Socket.io is required for this example:');
+  console.error('npm ' + 'install'.green + ' socket.io@0.6.18'.magenta);
+  process.exit(1);
+}
+
+var streamHandler = require('../models/streamHandler');
+
+//connect to mongoose database
+var db = mongoose.connect('mongodb://localhost/database', function(err){
+  if (err) throw (err);
+  console.log("CONNECWTED");
+})
+// var testPerson = new models.Person({
+//   _id: 0,
+//   name: "Lenny Brown",
+//   about: "Is a Sstudent",
+//   position: "Human Being 1",
+//   education: "Undergraduate Data Science",
+//
+// });
+// testPerson.save(function(err){
+//   if (err) throw err;
+//
+//   console.log('Saved Person')
+// })
+
+
+
+
+
+
+// Set up twitter instance.
+var t = new Twitter({
+  consumer_key: 'FPYIYaJPj7qIkIL3ZQvJ192kt',
+  consumer_secret: 'tDoq7HUWtKCZpWtE0cmo80TirFeiVe2GqAH0imNzB7VL6DXNw7',
+  token: '743100924525215744-Tjb2D1SPGbB6WXEUm5CzGMRyPCOl9JD',
+  token_secret: 'wPZig7911fNr2YXmcNT8dB7kq5074UogbMnVJ64K1K9MQ'
+})
+
+
+t.on('tweet', function(tweet){
+
+  //streamHandler(tweet, io);
+})
+
+t.track('complex');
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+io.on('connection', function(socket){
+  console.log('a user connected');
+
+})
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}

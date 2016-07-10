@@ -1,0 +1,15 @@
+body {
+  /* padding: 50px; */
+  margin: 0;
+  font-family: 'Roboto', 'Noto', sans-serif;
+  background-color: #fafafa;
+
+}
+
+a {
+  color: #00B7FF;
+}
+
+paper-button.color{
+        background-color:lightblue;
+}

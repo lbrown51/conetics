@@ -1,0 +1,22 @@
+{
+  "name": "site",
+  "description": "",
+  "main": "app.js",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "neon-elements": "PolymerElements/neon-elements#^1.0.0",
+    "paper-elements": "PolymerElements/paper-elements#^1.0.7",
+    "app-layout": "PolymerElements/app-layout#^0.9.0",
+    "iron-elements": "PolymerElements/iron-elements#^1.0.10",
+    "app-route": "PolymerElements/app-route#^0.9.1"
+  }
+}

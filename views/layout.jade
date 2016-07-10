@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    title= title
+    script(src="webcomponentsjs/webcomponents-lite.min.js")
+    link(rel='stylesheet', href='stylesheets/style.css')
+    link(rel="import", href="paper-button/paper-button.html")
+    meta(name="viewport",content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes")
+    
+    link(rel="import", href="font-roboto/roboto.html")
+    link(rel="import", href="iron-ajax/iron-ajax.html")
+    link(rel="import",href="src/blog-app.html")
+    script(src="https://cdn.socket.io/socket.io-1.1.0.js")
+    script(src="javascripts/socket-client.js")
+    script(type='text/javascript').
+      var socket = io()
+    
+  body(unresolved)
+    template(is="dom-bind")
+        //block content
+        iron-ajax(url="data/articles.json", auto, last-response="{{articles}}")
+        blog-app(articles="[[articles]]")
