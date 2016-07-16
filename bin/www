@@ -62,7 +62,7 @@ t.on('tweet', function(tweet){
   //streamHandler(tweet, io);
 })
 
-t.track('complex');
+//t.track('complex');
 /**
  * Get port from environment and store in Express.
  */
@@ -80,9 +80,13 @@ app.set('port', port);
  */
 
 io.on('connection', function(socket){
-  console.log('a user connected');
+  socket.on('new member', function(){
 
-})
+  });
+  console.log('connected');
+});
+
+
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);

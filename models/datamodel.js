@@ -1,22 +1,22 @@
 var mongoose = require('mongoose')
 
 var personSchema = mongoose.Schema({
-  _id       : Number,
   name      : String,
   picture   : String,
   about     : String,
   position  : String,
   education : String,
   website   : String,
+  email     : String,
   papers    : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Paper'}]
 });
+// Allow for input of picture
 
 var paperSchema = mongoose.Schema({
-  _id       : Number,
   title     : String,
   status    : String,
-  abstract  : String,
-  authors   : [String],
+  authors   : String,
+  journal   : String,
   members   : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Person'}],
   link      : String
 });

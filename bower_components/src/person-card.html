@@ -1,0 +1,181 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-fab/paper-fab.html">
+<link rel="import" href="../paper-card/paper-card.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-input/paper-textarea.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../paper-styles/color.html">
+
+<link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="app-icons.html">
+<link rel="import" href="../iron-form/iron-form.html">
+<dom-module id="person-card">
+
+  <template>
+
+    <style include="iron-flex iron-flex-alignment">
+
+      :host {
+        display: block;
+      }
+
+      .image {
+        height: 240px;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: contain;
+      }
+
+      .header {
+        position: relative;
+        padding: 24px 0;
+        text-align: center;
+        font-size: 14px;
+        letter-spacing: 1px;
+        color: #655858;
+      }
+
+      .title {
+        padding: 16px 0;
+        font-size: 30px;
+        font-weight: 600;
+      }
+
+      paper-card {
+        position: relative;
+        padding: 24px 0;
+        /*@apply(--layout-vertical);*/
+        @apply(--layout-flex);
+
+      }
+
+      .submit {
+        @apply(--layout-flex);
+        @apply(--layout-center-center);
+        padding: 5px 0;
+        margin-top: 0px;
+        @apply(--max-width: 100)
+      }
+
+      paper-button.blue {
+        background-color: var(--paper-blue-200);
+        color: white;
+      }
+
+      paper-button.green {
+        background-color: var(--paper-blue-400);
+        color: white;
+      }
+
+      paper-fab {
+        position: absolute;
+        top: -28px;;
+        right: 40px;
+        background-color: var(--app-primary-color);
+      }
+
+      .main {
+        padding: 24px 80px;
+        border-top: 1px solid #ddd;
+        font-size: 18px;
+        line-height: 32px;
+        letter-spacing: 1px;
+      }
+
+      h3 {
+        font-size: 24px;
+        font-weight: 400;
+        line-height: 32px;
+      }
+
+      /* narrow layout */
+      @media (max-width: 808px) {
+
+        .main {
+          padding: 24px;
+        }
+
+        /* position fab to the bottom right corner of the screen */
+        paper-fab {
+          position: fixed;
+          top: auto;
+          right: 24px;
+          bottom: 24px;
+        }
+
+      }
+
+    </style>
+
+    <!-- <div class="image" style$="background-color: {{article.primaryColor}}; background-image: url('{{article.image}}')"></div> -->
+    <div class="header">
+      <!--<div>{{article.author}}</div>-->
+      <div class="title">{{person.name}}</div>
+      <div class="subtitle">{{person.position}}</div>
+      <div class="subtitle">{{person.education}}</div>
+      <paper-button hidden$=[[isAdmin]] class="blue submit" on-tap="showUpdate">Update</paper-button>
+
+    </div>
+    <section class="main">
+      <p>{{person.about}}</p>
+      <div id="updateForm"
+        hidden$=[[hideUpdate]]>
+        <form is="iron-form" id="updperson" method="post" action="/updperson">
+          <input id="personid" type="hidden" name="id" value=[[person._id]]>
+          <paper-input class="updPerson" required name="name" label="Name" value="[[person.name]]"></paper-input>
+          <paper-input class="updPerson" name="email" label="Email" value="[[person.email]]"></paper-input>
+          <paper-textarea class="updPerson" required name="about" label="Description (autoresizing)" value="[[person.about]]"></paper-textarea>
+          <paper-input class="updPerson" name="position" label="Position" value="[[person.position]]"></paper-input>
+          <paper-input class="updPerson" name="education" label="Education" value="[[person.education]]"></paper-input>
+          <paper-input class="updPerson" name="website" label="Website URL" value="[[person.website]]"></paper-input>
+          <paper-button class="submit blue" onclick="_save(event)">Save</paper-button>
+        </form>
+      </div>
+    </section>
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'person-card',
+
+      ready: function(){
+      },
+
+      properties: {
+        hideUpdate: {
+          type: Boolean,
+          value: true,
+          notify: true
+        },
+
+        isAdmin: Boolean,
+
+        person: Object
+
+      },
+
+      showUpdate: function(){
+        this.hideUpdate = !this.hideUpdate;
+
+      },
+
+
+    });
+
+  </script>
+
+</dom-module>

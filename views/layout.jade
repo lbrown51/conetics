@@ -6,17 +6,14 @@ html
     link(rel='stylesheet', href='stylesheets/style.css')
     link(rel="import", href="paper-button/paper-button.html")
     meta(name="viewport",content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes")
-    
+    script(src="https://code.jquery.com/jquery-3.1.0.min.js"   integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous")
     link(rel="import", href="font-roboto/roboto.html")
     link(rel="import", href="iron-ajax/iron-ajax.html")
     link(rel="import",href="src/blog-app.html")
-    script(src="https://cdn.socket.io/socket.io-1.1.0.js")
-    script(src="javascripts/socket-client.js")
-    script(type='text/javascript').
-      var socket = io()
     
   body(unresolved)
     template(is="dom-bind")
-        //block content
-        iron-ajax(url="data/articles.json", auto, last-response="{{articles}}")
-        blog-app(articles="[[articles]]")
+      iron-ajax(url="data/articles.json", auto, last-response="{{articles}}")
+      iron-ajax(url="./people", auto, method='GET', handleAs='json', last-response="{{people}}")
+      iron-ajax(url="./papers", auto, method='GET', handleAs='json', last-response="{{papers}}")
+      blog-app(articles="[[articles]]", people="[[people]]", papers="[[papers]]")
