@@ -266,7 +266,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <template is="dom-repeat" items="[[articles]]">
               <a name="[[item.name]]" href="#/[[item.name]]/list">{{item.title}}</a>
             </template>
-            <a hidden$=[[!isAdmin]] name="Login" href="/auth/github">Login</a>
+            <a hidden$=[[!isAdmin]] onclick="loginform.open()" href="#/[[categoryData.category]]/list">Login</a>
             <a hidden$=[[isAdmin]] name="Logout" href="/logout">Logout</a>
             <!-- <a name="Login" href="https://127.0.0.1/hub/home">Login</a> -->
           </iron-selector>
@@ -305,6 +305,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
 
         <!-- list/detail pages -->
+        <paper-dialog id="loginform" >
+          <h2>Login to Administrate</h2>
+
+          <div class="buttons">
+            <form is="iron-form" id="login" method="post" action="/login">
+              <paper-input class="login" required name="email" label="Email"></paper-input>
+              <paper-input class="login" name="password" label="Password" type="password"></paper-input>
+              <paper-button dialog-confirm onclick="_save(event)" class="submit green">Login</paper-button>
+            </form>
+          </div>
+        </paper-dialog>
 
         <iron-pages selected="[[pageData.page]]" attr-for-selected="name">
 
@@ -408,6 +419,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </div>
                   </template>
 
+                  <template is="dom-if" if="[[_equal(category.name, 'admins')]]">
+                      <iron-ajax url="/admins"
+                                  auto method='GET'
+                                  handleAs='json'
+                                  last-response="{{admins}}"> </iron-ajax>
+                      <br/>
+                      <template is="dom-repeat" items="[[admins]]" as="admin">
+                        <paper-card heading="[[admin.local.email]]">
+                          <div class="card-actions">
+                            <form  is="iron-form" id="remadmin" method="post" action="/remadmin">
+                                <paper-button class="green" on-tap="showAdd">Edit User</paper-button>
+                                <paper-button name="email" value="[[admin.local.email]]" class="red" on-tap="_delete(event)">Delete User</paper-button>
+                            </form>
+                          </div>
+                        </paper-card>
+                      </template>
+                      <div id="addForm"
+                        hidden$=[[hideAdd]]>
+                        <div class='edit card-content'>
+                        <form is="iron-form" id="addadmin" method="post" action="/admin">
+                          <paper-input class="newAdmin" required name="email" label="Email"></paper-input>
+                          <paper-input class="newAdmin" name="password" label="Password" type="password"></paper-input>
+                          <paper-button onclick="_save(event)" class="submit green">Add Administrator</paper-button>
+                        </form>
+                      </div>
+                    </div>
+                  </template>
+
                 </section>
               </template>
             </template>
@@ -441,6 +480,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          */
         articles: Object,
 
+        admins: Object,
+
         route: Object,
 
         subRoute: Object,
@@ -473,7 +514,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         isAdmin: {
           type: Boolean,
           notify: true,
-          value: false
+          value: true
         },
 
         activate: String,

@@ -2,7 +2,7 @@
   {
      "name":"summary",
      "title":"What We Do",
-     "content": "We study the "
+     "content": "We study the"
    },
    {
       "name": "people",
@@ -13,6 +13,11 @@
       "name": "papers",
       "title": "Papers",
       "content": "Here is a list of recently published papers"
+   },
+   {
+     "name": "admins",
+     "title": "Admin Page",
+     "content": "This is the administrator page"
    }
 
 ]

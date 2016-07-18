@@ -1,0 +1,37 @@
+<!-- <template is="dom-if" if="[[_equal(category.name, 'admins')]]">
+  <iron-ajax url="./admins"
+              auto method='GET'
+              handleAs='json'
+              last-response="{{admins}}"> </iron-ajax>
+
+  <template is="dom-repeat" items="[[admins]]" as="admin">
+  <div class='edit' id='editadmins'>
+      <div class='card-content'>
+        <div id="deleteForm"
+          hidden$=[[hideDelete]]>
+          <form is="iron-form" id="remadmin" method="post" action="/remadmin">
+            <input id="admintitle" type="hidden" name="selected" value="[[selected]]">
+            <iron-selector name='selected' attr-for-selected="email" selected="{{selected}}">
+              <template is="dom-repeat" items="[[admin]]" as="paper">
+                <paper-item title='[[admin.email]]'>[[admin.email]]</paper-item>
+              </template>
+              <paper-button  class="submit red" onclick="_delete(event)">Delete</paper-button>
+            </iron-selector>
+          </form>
+        </div>
+        <div id="addForm"
+          hidden$=[[hideAdd]]>
+          <form is="iron-form" id="addpaper" method="post" action="/paper">
+            <paper-input class="newPaper" required name="title" label="Title"></paper-input>
+            <paper-input class="newPaper" name="status" label="Status (or Published Location)"></paper-input>
+            <paper-input class="newPaper" name="authors" label="Authors"></paper-input>
+            <paper-input class="newPaper" name="link" label="Link"></paper-input>
+            <paper-button onclick="_save(event)" class="submit green">OK</paper-button>
+          </form>
+        </div>
+        <paper-button class="green" on-tap="showAdd">Add an Admin</paper-button>
+        <paper-button class="blue" on-tap="showEdit">Edit an Admin</paper-button>
+    </div>
+  </div>
+</template>
+</template> -->

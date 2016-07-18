@@ -16,4 +16,4 @@ html
       iron-ajax(url="data/articles.json", auto, last-response="{{articles}}")
       iron-ajax(url="./people", auto, method='GET', handleAs='json', last-response="{{people}}")
       iron-ajax(url="./papers", auto, method='GET', handleAs='json', last-response="{{papers}}")
-      blog-app(articles="[[articles]]", people="[[people]]", papers="[[papers]]")
+      blog-app(articles="[[articles]]", people="[[people]]", papers="[[papers]]", admins="[[admins]]")

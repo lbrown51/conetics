@@ -1,4 +1,5 @@
 var mongoose = require('mongoose')
+var bcrypt   = require('bcrypt-nodejs');
 
 var personSchema = mongoose.Schema({
   name      : String,
@@ -21,8 +22,25 @@ var paperSchema = mongoose.Schema({
   link      : String
 });
 
+var adminSchema = mongoose.Schema({
+  local : {
+    email     : String,
+    password  : String
+  }
+});
+
+adminSchema.methods.generateHash = function(password) {
+  return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null)
+};
+
+adminSchema.methods.validPassword = function(password) {
+    return bcrypt.compareSync(password, this.local.password);
+};
+
+var Admin = mongoose.model('Admin', adminSchema);
+
 var Person = mongoose.model('Person', personSchema);
 
 var Paper = mongoose.model('Paper', paperSchema);
 
-module.exports = {Person, Paper}
+module.exports = {Person, Paper, Admin};

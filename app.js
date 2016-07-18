@@ -12,10 +12,9 @@ var models = require('./models/datamodel.js');
 var routes = require('./routes/index');
 var people = require('./routes/people');
 var papers = require('./routes/papers');
-var passportGithub = require('./auth/github')
 
 var app = express();
-
+var init = require('./auth/init')(passport);
 
 // var stream = client.stream('statuses/filter');
 // stream.on('data', function(tweet){
@@ -38,11 +37,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// app.use(session({
-//   secret: 'keyboard cat',
-//   resave: true,
-//   saveUninitialized: true
-// }));
+app.use(session({
+  secret: 'conetics lab please',
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -52,21 +49,38 @@ app.use(express.static(path.join(__dirname, 'bower_components')));
 app.use('/', routes);
 app.get('/people', people);
 app.get('/papers', papers);
-app.post('/*person', ensureAuthenticated, people);
-app.post('/*paper', ensureAuthenticated, papers);
-
-app.get('/auth/github',
-  passport.authenticate('github', { scope: [ 'user:email' ] }),
-  function(req, res){
-    // The request will be redirected to GitHub for authentication, so this
-    // function will not be called.
+app.get('/admins', isLoggedIn, function(req, res){
+  models.Admin.find({}, function(err, admins){
+    console.log(admins)
+    res.json(admins);
   });
+});
+app.post('/*person', people);
+app.post('/*paper', papers);
 
-app.get('/auth/github/callback',
-  passport.authenticate('github', { failureRedirect: '/' }),
-  function(req, res) {
-    res.redirect('/')
-  });
+// app.get('/auth/github',
+//   passport.authenticate('github', { scope: [ 'user:email' ] }),
+//   function(req, res){
+//     // The request will be redirected to GitHub for authentication, so this
+//     // function will not be called.
+//   });
+//
+// app.get('/auth/github/callback',
+//   passport.authenticate('github', { failureRedirect: '/' }),
+//   function(req, res) {
+//     res.redirect('/')
+//   });
+//
+
+app.post('/admin', isLoggedIn, passport.authenticate('local-signup', {
+  successRedirect : '/admins-success',
+  failureRedirect : '/admins-failure', // redirect back to the signup page if there is an error
+}))
+
+app.post('/login', passport.authenticate('local-login', {
+       successRedirect : '/admins', // redirect to the secure profile section
+       failureRedirect : '/', // redirect back to the signup page if there is an error
+   }));
 
 app.get('/logout', function(req, res){
   req.logout();
@@ -76,10 +90,14 @@ app.get('/logout', function(req, res){
 
 
 
-function ensureAuthenticated(req, res, next) {
+function isLoggedIn(req, res, next) {
   console.log(req)
-  if (req.isAuthenticated()) { return next(); }
-  res.redirect('/')
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    console.log("Not Auth");
+    res.redirect('/')
+  }
 }
 
 
